@@ -1,14 +1,18 @@
+import * as HTTPStatusCodes from "http-status-codes";
+
 export default function handler(lambda) {
   return async function (event, context) {
-    let body, statusCode;
+    let statusCode;
+    let body;
 
     try {
       // Run the Lambda
-      body = await lambda(event, context);
-      statusCode = 201;
-    } catch (e) {
-      body = { error: e.message };
-      statusCode = 500;
+      const result = await lambda(event, context);
+      statusCode = result.statusCode;
+      body = result.body;
+    } catch (err) {
+      statusCode = HTTPStatusCodes.INTERNAL_SERVER_ERROR;
+      body = { error: err.message };
     }
 
     // Return HTTP response

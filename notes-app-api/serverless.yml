@@ -35,14 +35,58 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-2:*:*"
 
 functions:
+  get:
+    environment:
+      tableName: notes
+      CORSOrigin: "*"
+    handler: src/notes/get.main
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  list:
+    environment:
+      tableName: notes
+      CORSOrigin: "*"
+    handler: src/notes/list.main
+    events:
+      - http:
+          path: notes
+          method: get
+          cors: true
+          authorizer: aws_iam
   create:
     environment:
       tableName: notes
       CORSOrigin: "*"
-    handler: src/create.main
+    handler: src/notes/create.main
     events:
       - http:
-          path: hello
+          path: notes
           method: post
+          cors: true
+          authorizer: aws_iam
+  update:
+    environment:
+      tableName: notes
+      CORSOrigin: "*"
+    handler: src/notes/update.main
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
+  delete:
+    environment:
+      tableName: notes
+      CORSOrigin: "*"
+    handler: src/notes/delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
           cors: true
           authorizer: aws_iam

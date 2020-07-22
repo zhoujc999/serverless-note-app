@@ -20,6 +20,7 @@
     "serverless-offline": "^5.12.1"
   },
   "dependencies": {
+    "http-status-codes": "^1.4.0",
     "uuid": "^8.2.0"
   }
 }

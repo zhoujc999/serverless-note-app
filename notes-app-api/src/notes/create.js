@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import handler from "./lib/handler";
-import dynamoDb from "./lib/dynamodb";
+import handler from "../lib/handler";
+import dynamoDb from "../lib/dynamodb";
+import * as HTTPStatusCodes from "http-status-codes";
 
 export const main = handler(async (event, context) => {
   // Request body is passed in as a JSON encoded string in 'event.body'
@@ -14,11 +15,13 @@ export const main = handler(async (event, context) => {
       content: data.content,
       attachment: data.attachment,
       createdAt: Date.now()
-    },
+    }
   };
 
   await dynamoDb.put(params);
 
-  return params.Item;
-
+  return {
+    statusCode: HTTPStatusCodes.CREATED,
+    body: params.Item
+  };
 });

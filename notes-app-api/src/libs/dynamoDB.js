@@ -1,9 +1,26 @@
 import AWS from "aws-sdk";
 
-const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+export const dynamoDBGet = (params) => {
+  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  dynamoDBClient.get(params).promise();
+};
 
-export const dynamoDBGet = (params) => dynamoDBClient.get(params).promise();
-export const dynamoDBPut = (params) => dynamoDBClient.put(params).promise();
-export const dynamoDBQuery = (params) => dynamoDBClient.query(params).promise();
-export const dynamoDBUpdate = (params) => dynamoDBClient.update(params).promise();
-export const dynamoDBDelete = (params) => dynamoDBClient.delete(params).promise();
+export const dynamoDBPut = (params) => {
+  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  dynamoDBClient.put(params).promise();
+};
+
+export const dynamoDBQuery = (params) => {
+  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  dynamoDBClient.query(params).promise();
+};
+
+export const dynamoDBUpdate = (params) => {
+  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  dynamoDBClient.update(params).promise();
+};
+
+export const dynamoDBDelete = (params) => {
+  const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+  dynamoDBClient.delete(params).promise();
+};

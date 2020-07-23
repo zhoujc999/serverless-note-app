@@ -1,6 +1,9 @@
-import handler from "../lib/handler";
-import dynamoDb from "../lib/dynamodb";
-import * as HTTPStatusCodes from "http-status-codes";
+import { handler } from "../libs/handler";
+import { get as dynamodbGet } from "../libs/dynamodb";
+import {
+  NOT_FOUND,
+  OK
+} from "http-status-codes";
 
 export const main = handler(async (event, context) => {
   const params = {
@@ -11,17 +14,17 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  const result = await dynamoDb.get(params);
+  const result = await dynamodbGet(params);
 
   if (!result.Item) {
     return {
-      statusCode: HTTPStatusCodes.NOT_FOUND,
+      statusCode: NOT_FOUND,
       body: null
     };
   }
 
   return {
-    statusCode: HTTPStatusCodes.OK,
+    statusCode: OK,
     body: result.Item
   };
 });

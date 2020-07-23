@@ -1,6 +1,6 @@
-import handler from "../lib/handler";
-import dynamoDb from "../lib/dynamodb";
-import * as HTTPStatusCodes from "http-status-codes";
+import { handler } from "../libs/handler";
+import { update as dynamoDbUpdate } from "../libs/dynamodb";
+import { NO_CONTENT } from "http-status-codes";
 
 export const main = handler(async (event, context) => {
   // Request body is passed in as a JSON encoded string in 'event.body'
@@ -20,10 +20,10 @@ export const main = handler(async (event, context) => {
     ReturnValues: "ALL_NEW"
   };
 
-  await dynamoDb.update(params);
+  await dynamoDbUpdate(params);
 
   return {
-    statusCode: HTTPStatusCodes.NO_CONTENT,
+    statusCode: NO_CONTENT,
     body: null
   };
 });

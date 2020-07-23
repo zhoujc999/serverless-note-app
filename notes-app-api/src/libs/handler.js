@@ -1,6 +1,6 @@
-import * as HTTPStatusCodes from "http-status-codes";
+import { INTERNAL_SERVER_ERROR } from "http-status-codes";
 
-export default function handler(lambda) {
+export const handler = (lambda) => {
   return async function (event, context) {
     let statusCode;
     let body;
@@ -11,7 +11,7 @@ export default function handler(lambda) {
       statusCode = result.statusCode;
       body = result.body;
     } catch (err) {
-      statusCode = HTTPStatusCodes.INTERNAL_SERVER_ERROR;
+      statusCode = INTERNAL_SERVER_ERROR;
       body = { error: err.message };
     }
 
@@ -25,4 +25,4 @@ export default function handler(lambda) {
       },
     };
   };
-}
+};

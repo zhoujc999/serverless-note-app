@@ -1,6 +1,6 @@
-import handler from "../lib/handler";
-import dynamoDb from "../lib/dynamodb";
-import * as HTTPStatusCodes from "http-status-codes";
+import { handler } from "../libs/handler";
+import { query as dynamoDbQuery } from "../libs/dynamodb";
+import { OK } from "http-status-codes";
 
 export const main = handler(async (event, context) => {
   const params = {
@@ -11,10 +11,10 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  const result = await dynamoDb.query(params);
+  const result = await dynamoDbQuery(params);
 
   return {
-    statusCode: HTTPStatusCodes.OK,
+    statusCode: OK,
     body: result.Items
   };
 });

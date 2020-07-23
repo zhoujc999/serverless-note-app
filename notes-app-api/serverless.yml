@@ -6,10 +6,8 @@ package:
   individually: true
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-bundle
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
-
 provider:
   name: aws
   runtime: nodejs12.x
@@ -20,8 +18,9 @@ provider:
   # the following line. Also, make sure to not
   # commit your .env.
   #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  environment:
+    CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
+
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -38,7 +37,6 @@ functions:
   get:
     environment:
       tableName: ${file(./.env/dev.env.json):configs.tableName}
-      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/get.main
     events:
       - http:
@@ -49,7 +47,6 @@ functions:
   list:
     environment:
       tableName: ${file(./.env/dev.env.json):configs.tableName}
-      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/list.main
     events:
       - http:
@@ -60,7 +57,6 @@ functions:
   create:
     environment:
       tableName: ${file(./.env/dev.env.json):configs.tableName}
-      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/create.main
     events:
       - http:
@@ -71,7 +67,6 @@ functions:
   update:
     environment:
       tableName: ${file(./.env/dev.env.json):configs.tableName}
-      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/update.main
     events:
       - http:
@@ -82,7 +77,6 @@ functions:
   delete:
     environment:
       tableName: ${file(./.env/dev.env.json):configs.tableName}
-      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/delete.main
     events:
       - http:
@@ -90,3 +84,20 @@ functions:
           method: delete
           cors: true
           authorizer: aws_iam
+
+  billing:
+    environment:
+      stripeSecretKey: ${file(./.env/dev.env.json):secrets.stripeSecretKey}
+      paymentCurrency: ${file(./.env/dev.env.json):configs.paymentCurrency}
+    handler: src/payments/create.main
+    events:
+      - http:
+          path: payments
+          method: post
+          cors: true
+          authorizer: aws_iam
+
+# Create our resources with separate CloudFormation templates
+resources:
+  # API Gateway Errors
+  - ${file(./resources/api-gateway-errors.yml)}

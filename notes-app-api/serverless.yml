@@ -32,13 +32,13 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-2:*:*"
+      Resource: ${file(./.env/dev.env.json):configs.dynamoDbResource}
 
 functions:
   get:
     environment:
-      tableName: notes
-      CORSOrigin: "*"
+      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/get.main
     events:
       - http:
@@ -48,8 +48,8 @@ functions:
           authorizer: aws_iam
   list:
     environment:
-      tableName: notes
-      CORSOrigin: "*"
+      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/list.main
     events:
       - http:
@@ -59,8 +59,8 @@ functions:
           authorizer: aws_iam
   create:
     environment:
-      tableName: notes
-      CORSOrigin: "*"
+      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/create.main
     events:
       - http:
@@ -70,8 +70,8 @@ functions:
           authorizer: aws_iam
   update:
     environment:
-      tableName: notes
-      CORSOrigin: "*"
+      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/update.main
     events:
       - http:
@@ -81,8 +81,8 @@ functions:
           authorizer: aws_iam
   delete:
     environment:
-      tableName: notes
-      CORSOrigin: "*"
+      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      CORSOrigin: ${file(./.env/dev.env.json):configs.CORSOrigin}
     handler: src/notes/delete.main
     events:
       - http:

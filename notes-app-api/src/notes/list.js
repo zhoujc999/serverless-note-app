@@ -1,5 +1,5 @@
 import { handler } from "../libs/handler";
-import { query as dynamoDbQuery } from "../libs/dynamodb";
+import { dynamoDBQuery } from "../libs/dynamoDB";
 import { OK } from "http-status-codes";
 
 export const main = handler(async (event, context) => {
@@ -11,7 +11,7 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  const result = await dynamoDbQuery(params);
+  const result = await dynamoDBQuery(params);
 
   return {
     statusCode: OK,

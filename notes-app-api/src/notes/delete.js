@@ -1,5 +1,5 @@
 import { handler } from "../libs/handler";
-import { remove as dynamoDbDelete } from "../libs/dynamodb";
+import { dynamoDBDelete } from "../libs/dynamoDB";
 import { NO_CONTENT } from "http-status-codes";
 
 export const main = handler(async (event, context) => {
@@ -11,7 +11,7 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  await dynamoDbDelete(params);
+  await dynamoDBDelete(params);
 
   return {
     statusCode: NO_CONTENT,

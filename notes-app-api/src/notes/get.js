@@ -1,5 +1,5 @@
 import { handler } from "../libs/handler";
-import { get as dynamodbGet } from "../libs/dynamodb";
+import { dynamoDBGet } from "../libs/dynamoDB";
 import {
   NOT_FOUND,
   OK
@@ -14,7 +14,7 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  const result = await dynamodbGet(params);
+  const result = await dynamoDBGet(params);
 
   if (!result.Item) {
     return {

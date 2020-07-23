@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { handler } from "../libs/handler";
-import { put as dynamoDbPut } from "../libs/dynamodb";
+import { dynamoDBPut } from "../libs/dynamoDB";
 import { CREATED } from "http-status-codes";
 
 export const main = handler(async (event, context) => {
@@ -18,7 +18,7 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  await dynamoDbPut(params);
+  await dynamoDBPut(params);
 
   return {
     statusCode: CREATED,

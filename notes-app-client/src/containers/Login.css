@@ -1,0 +1,15 @@
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 10rem 0;
+  }
+
+  .Login Form {
+    margin: 0 auto;
+    max-width: 20rem;
+  }
+
+  .InvalidWarning {
+    color: red;
+  }
+}
+

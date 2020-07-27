@@ -6,6 +6,7 @@ import {
   Spinner
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { Auth } from "aws-amplify";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import "./Signup.css";
@@ -115,7 +116,7 @@ const Signup = () => {
     confirmationCode: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [newUser, setNewUser] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const validateForm = () => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -134,16 +135,51 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    setNewUser("test");
+    const code = "531659";
+    try {
+      await Auth.confirmSignUp(fields.email, code, { forceAliasCreation: false });
+    } catch (err) {
+      alert(JSON.stringify(err));
+      if (err.code !== "UserNotFoundException") {
+        alert("Account with email already exists, log in instead.");
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    try {
+      await Auth.signUp({
+        username: fields.email,
+        password: fields.password,
+      });
+      setShowConfirmation(true);
+    } catch (err) {
+      if (err.code === "UsernameExistsException") {
+        await Auth.resendSignUp(fields.email);
+        setShowConfirmation(true);
+      } else {
+        alert(err.message);
+      }
+    }
     setIsLoading(false);
   };
 
   const handleConfirmationSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    setIsLoading(false);
+    try {
+      await Auth.confirmSignUp(fields.email, fields.confirmationCode);
+      await Auth.signIn(fields.email, fields.password);
+
+      userHasAuthenticated(true);
+      history.push("/");
+    } catch (err) {
+      alert(err.message);
+      setIsLoading(false);
+    }
   };
-  if (newUser === null) {
+
+  if (!showConfirmation) {
     return (
     <Container className="Signup">
       <SignupForm

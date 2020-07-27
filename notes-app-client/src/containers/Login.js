@@ -20,7 +20,7 @@ const Login = () => {
     password: ""
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [invalidCredentials, setinvalidCredentials] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validateForm = () => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -30,6 +30,7 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     setIsLoading(true);
 
     try {
@@ -37,9 +38,10 @@ const Login = () => {
       userHasAuthenticated(true);
       history.push("/");
     } catch (err) {
-      setinvalidCredentials(true);
+      alert(JSON.stringify(err));
+      setErrorMessage(err.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -71,9 +73,11 @@ const Login = () => {
           />
         </Form.Group>
 
-        <p className="InvalidWarning" hidden={!invalidCredentials}>
-          Incorrect email or password.
-        </p>
+        <Container className="WarningContainer">
+          <p className="InvalidWarning">
+            {errorMessage}
+          </p>
+        </Container>
 
         <Button
           variant="outline-primary"

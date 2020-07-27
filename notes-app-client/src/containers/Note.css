@@ -1,0 +1,9 @@
+.Note Form {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.Note Form textarea {
+  height: 20rem;
+  font-size: 1.5rem;
+}

@@ -8,6 +8,10 @@
     max-width: 20rem;
   }
 
+  .WarningContainer {
+    min-height: 2rem;
+  }
+
   .InvalidWarning {
     color: red;
   }

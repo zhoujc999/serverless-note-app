@@ -13,15 +13,15 @@
     "url": "https://github.com/AnomalyInnovations/serverless-nodejs-starter.git"
   },
   "devDependencies": {
-    "aws-sdk": "^2.717.0",
+    "aws-sdk": "^2.723.0",
     "jest": "^26.1.0",
-    "serverless": "^1.76.1",
+    "serverless": "^1.77.1",
     "serverless-bundle": "2.0.0",
     "serverless-offline": "^5.12.1"
   },
   "dependencies": {
     "http-status-codes": "^1.4.0",
-    "stripe": "^8.78.0",
-    "uuid": "^8.2.0"
+    "stripe": "^8.80.0",
+    "uuid": "^8.3.0"
   }
 }

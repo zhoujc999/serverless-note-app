@@ -3,6 +3,8 @@ import {
   Route,
   Switch
 } from "react-router-dom";
+import AuthenticatedRoute from "./routes/AuthenticatedRoute";
+import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
@@ -16,21 +18,21 @@ const Routes = () => (
     <Route exact path="/">
       <Home />
     </Route>
-    <Route exact path="/login">
+    <UnauthenticatedRoute exact path="/login">
       <Login />
-    </Route>
-    <Route exact path="/signup">
+    </UnauthenticatedRoute>
+    <UnauthenticatedRoute exact path="/signup">
       <Signup />
-    </Route>
-    <Route exact path="/settings">
+    </UnauthenticatedRoute>
+    <AuthenticatedRoute exact path="/settings">
       <Settings />
-    </Route>
-    <Route exact path="/notes/new">
+    </AuthenticatedRoute>
+    <AuthenticatedRoute exact path="/notes/new">
       <NewNote />
-    </Route>
-    <Route exact path="/notes/:id">
+    </AuthenticatedRoute>
+    <AuthenticatedRoute exact path="/notes/:id">
       <Note />
-    </Route>
+    </AuthenticatedRoute>
     <Route>
       <NotFound />
     </Route>

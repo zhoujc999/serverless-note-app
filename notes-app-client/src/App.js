@@ -5,13 +5,14 @@ import {
   Nav,
 } from "react-bootstrap";
 import { Auth } from "aws-amplify";
+import {Elements} from '@stripe/react-stripe-js';
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 import "./App.css";
 
 
 
-const App = () => {
+const App = (props) => {
   // check if the user needs to authenticate
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
@@ -76,7 +77,9 @@ const App = () => {
         </Navbar.Collapse>
       </Navbar>
       <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-        <Routes />
+        <Elements stripe={props.stripe}>
+          <Routes />
+        </Elements>
       </AppContext.Provider>
     </>
   );

@@ -5,7 +5,6 @@ import {
   Button,
   Spinner
 } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
@@ -13,7 +12,6 @@ import "./Login.css";
 
 const Login = () => {
   const { userHasAuthenticated } = useAppContext();
-  const history = useHistory();
 
   const [fields, handleFieldChange] = useFormFields({
     email: "",
@@ -36,7 +34,6 @@ const Login = () => {
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
-      history.push("/");
     } catch (err) {
       alert(JSON.stringify(err));
       setErrorMessage(err.message);

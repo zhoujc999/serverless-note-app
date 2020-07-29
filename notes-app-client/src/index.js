@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
+import {loadStripe} from '@stripe/stripe-js';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -31,10 +32,13 @@ Amplify.configure({
   }
 });
 
+
+const stripePromise = loadStripe(config.STRIPE_PUBLIC_KEY);
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <App stripe={stripePromise}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

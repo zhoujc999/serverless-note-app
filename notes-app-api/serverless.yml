@@ -116,7 +116,7 @@ functions:
     environment:
       STRIPE_SECRET_KEY: ${self:custom.stripeSecretKey}
       PAYMENT_CURRENCY: ${self:custom.paymentCurrency}
-   handler: src/payments/create.main
+    handler: src/payments/create.main
     events:
       - http:
           path: payments

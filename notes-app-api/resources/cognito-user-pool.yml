@@ -13,8 +13,11 @@ Resources:
         CaseSensitive: false
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
-      EmailVerificationSubject: "Verify Email Address for APP_NAME"
-      EmailVerificationMessage: ${file(../email_templates/verification.html)}
+
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+        EmailSubjectByLink: "Verify Email Address for APP_NAME"
+        EmailMessageByLink: "Click the link here {####}"
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient

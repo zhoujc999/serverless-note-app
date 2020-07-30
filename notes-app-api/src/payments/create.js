@@ -22,11 +22,11 @@ export const main = handler(async (event, context) => {
   const description = "Scratch charge";
 
   // Load our secret key from the  environment variables
-  const stripe = stripePackage(process.env.stripeSecretKey);
+  const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
-    currency: process.env.paymentCurrency,
+    currency: process.env.PAYMENT_CURRENCY,
     description: description,
   }, {
     idempotencyKey: uuidv4()

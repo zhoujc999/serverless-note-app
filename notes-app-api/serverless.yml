@@ -8,6 +8,17 @@ package:
 plugins:
   - serverless-bundle
   - serverless-offline
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  # Set the table name here so we can use it while testing locally
+  tableName: ${self:custom.stage}-${file(./.env/dev.env.json):configs.resources.tableName}
+  userPoolName: ${self:custom.stage}-${file(./.env/dev.env.json):configs.resources.userPoolName}
+  userPoolClientName: ${self:custom.stage}-${file(./.env/dev.env.json):configs.resources.userPoolClientName}
+  identityPoolName: ${self:custom.stage}-${file(./.env/dev.env.json):configs.resources.identityPoolName}
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -31,12 +42,26 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: ${file(./.env/dev.env.json):configs.dynamoDbResource}
+      Resource:
+        - Fn::GetAtt: [ NotesTable, Arn ]
+    # Allow users to upload attachments to their
+    # folder inside our S3 bucket
+    - Effect: Allow
+      Action:
+        - "s3:*"
+      Resource:
+        - Fn::Join:
+          - ""
+          -
+            - Fn::GetAtt: [ AttachmentsBucket, Arn ]
+            - "/private/"
+            - "$"
+            - "{cognito-identity.amazonaws.com:sub}/*"
 
 functions:
   get:
     environment:
-      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      TABLE_NAME: ${self:custom.tableName}
     handler: src/notes/get.main
     events:
       - http:
@@ -46,7 +71,7 @@ functions:
           authorizer: aws_iam
   list:
     environment:
-      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      TABLE_NAME: ${self:custom.tableName}
     handler: src/notes/list.main
     events:
       - http:
@@ -56,7 +81,7 @@ functions:
           authorizer: aws_iam
   create:
     environment:
-      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      TABLE_NAME: ${self:custom.tableName}
     handler: src/notes/create.main
     events:
       - http:
@@ -66,7 +91,7 @@ functions:
           authorizer: aws_iam
   update:
     environment:
-      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      TABLE_NAME: ${self:custom.tableName}
     handler: src/notes/update.main
     events:
       - http:
@@ -76,7 +101,7 @@ functions:
           authorizer: aws_iam
   delete:
     environment:
-      tableName: ${file(./.env/dev.env.json):configs.tableName}
+      TABLE_NAME: ${self:custom.tableName}
     handler: src/notes/delete.main
     events:
       - http:
@@ -87,8 +112,8 @@ functions:
 
   billing:
     environment:
-      stripeSecretKey: ${file(./.env/dev.env.json):secrets.stripeSecretKey}
-      paymentCurrency: ${file(./.env/dev.env.json):configs.paymentCurrency}
+      STRIPE_SECRET_KEY: ${file(./.env/dev.env.json):secrets.stripeSecretKey}
+      PAYMENT_CURRENCY: ${file(./.env/dev.env.json):configs.paymentCurrency}
     handler: src/payments/create.main
     events:
       - http:
@@ -101,3 +126,13 @@ functions:
 resources:
   # API Gateway Errors
   - ${file(./resources/api-gateway-errors.yml)}
+  # DynamoDB
+  - ${file(./resources/dynamodb-table.yml)}
+  # S3
+  - ${file(./resources/s3-bucket.yml)}
+  # Cognito
+  - ${file(./resources/cognito-user-pool.yml)}
+  # Identity Pool
+  - ${file(./resources/cognito-identity-pool.yml)}
+  # IAM Authenticated Role
+  - ${file(./resources/iam-auth-role.yml)}

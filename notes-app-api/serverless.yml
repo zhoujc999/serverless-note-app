@@ -18,7 +18,7 @@ custom:
   userPoolName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.userPoolName}, "user-pool"}
   userPoolClientName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.userPoolClientName}, "user-pool-client"}
   identityPoolName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.identityPoolName}, "identity-pool"}
-  stripeSecretKey: ${${env:STRIPE_SECRET_KEY}, ${${file(./.env/dev.env.json):secrets.stripeSecretKey}}
+  stripeSecretKey: ${${file(./.env/dev.env.json):secrets.stripeSecretKey}, ${env:STRIPE_SECRET_KEY}}
   CORSOrigin: ${${file(./.env/dev.env.json):configs.CORSOrigin, "*"}
 
 provider:

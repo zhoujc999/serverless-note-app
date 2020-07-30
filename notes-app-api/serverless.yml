@@ -14,12 +14,13 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.tableName}, "notes"}
-  userPoolName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.userPoolName}, "user-pool"}
-  userPoolClientName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.userPoolClientName}, "user-pool-client"}
-  identityPoolName: ${self:custom.stage}-${${file(./.env/dev.env.json):configs.resources.identityPoolName}, "identity-pool"}
-  stripeSecretKey: ${${file(./.env/dev.env.json):secrets.stripeSecretKey}, ${env:STRIPE_SECRET_KEY}}
-  CORSOrigin: ${${file(./.env/dev.env.json):configs.CORSOrigin, "*"}
+  tableName: ${self:custom.stage}-${env:TABLE_NAME}
+  userPoolName: ${self:custom.stage}-${env:USER_POOL_NAME}
+  userPoolClientName: ${self:custom.stage}-${env:USER_POOL_CLIENT_NAME}
+  identityPoolName: ${self:custom.stage}-${env:IDENTITY_POOL_NAME}
+  stripeSecretKey: ${env:STRIPE_SECRET_KEY}
+  paymentCurrency: ${env:PAYMENT_CURRENCY}
+  CORSOrigin: ${env:CORS_ORIGIN}
 
 provider:
   name: aws

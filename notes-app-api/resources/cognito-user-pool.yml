@@ -13,11 +13,13 @@ Resources:
         CaseSensitive: false
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
-
-      VerificationMessageTemplate:
-        DefaultEmailOption: CONFIRM_WITH_LINK
-        EmailSubjectByLink: "Verify Email Address for APP_NAME"
-        EmailMessageByLink: "Click the link here {####}"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 7
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: true
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient

@@ -6,10 +6,10 @@ let logs;
 // Log AWS SDK calls
 AWS.config.logger = { log: debug };
 
-const debug = () => {
+const debug = (...args) => {
   logs.push({
     date: new Date(),
-    string: util.format.apply(null, arguments),
+    string: util.format(...args),
   });
 };
 

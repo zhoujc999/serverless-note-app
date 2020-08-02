@@ -36,6 +36,7 @@ provider:
   # commit your .env.
   #
   environment:
+    STAGE: ${self:custom.stage}
     CORS_ORIGIN: ${self:custom.CORSOrigin}
 
   iamRoleStatements:

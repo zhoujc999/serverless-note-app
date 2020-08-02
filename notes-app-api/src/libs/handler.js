@@ -1,4 +1,4 @@
-import * as debug from "./debug-lib";
+import * as debug from "./debug";
 import { INTERNAL_SERVER_ERROR } from "http-status-codes";
 
 export const handler = (lambda) => {

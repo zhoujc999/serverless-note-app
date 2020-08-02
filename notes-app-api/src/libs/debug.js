@@ -3,9 +3,6 @@ import AWS from "aws-sdk";
 
 let logs;
 
-// Log AWS SDK calls
-AWS.config.logger = { log: debug };
-
 const debug = (...args) => {
   logs.push({
     date: new Date(),
@@ -28,5 +25,8 @@ export const flush = (e) => {
   logs.forEach(({ date, string }) => console.debug(date, string));
   console.error(e);
 };
+
+// Log AWS SDK calls
+AWS.config.logger = { log: debug };
 
 export default debug;

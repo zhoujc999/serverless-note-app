@@ -1,5 +1,4 @@
 import * as debug from "./debug";
-import { INTERNAL_SERVER_ERROR } from "http-status-codes";
 
 export const handler = (lambda) => {
   return async function (event, context) {
@@ -8,6 +7,8 @@ export const handler = (lambda) => {
 
     // Start debugger
     debug.init(event, context);
+
+    context.callbackWaitsForEmptyEventLoop = false;
 
     try {
       // Run the Lambda
@@ -18,8 +19,11 @@ export const handler = (lambda) => {
       // Print debug messages
       debug.flush(err);
 
-      statusCode = INTERNAL_SERVER_ERROR;
-      body = { error: err.message };
+      statusCode = err.statusCode;
+      body = {
+        error: err.code,
+        message: err.message
+       };
     }
 
     // Return HTTP response

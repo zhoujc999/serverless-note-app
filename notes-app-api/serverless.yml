@@ -21,10 +21,9 @@ custom:
   stripeSecretKey: ${env:STRIPE_SECRET_KEY}
   paymentCurrency: ${env:PAYMENT_CURRENCY}
   CORSOrigin: ${env:CORS_ORIGIN}
-  dotEnvPath: "./.envs/.env."${self:custom.stage}
 
   dotenv:
-    path: ${self:custom.dotEnvPath}
+    path: .env.dev
 
 provider:
   name: aws
